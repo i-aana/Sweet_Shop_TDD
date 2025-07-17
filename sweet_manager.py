@@ -1,3 +1,4 @@
+#file for managing operation on sweets
 from sweet import Sweet
 from data_persistence import DataPersistence
 class SweetManager:

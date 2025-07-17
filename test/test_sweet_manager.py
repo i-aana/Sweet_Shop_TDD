@@ -6,9 +6,10 @@ import json
 from data_persistence import DataPersistence
 from data_persistence import SweetDataNotFoundError
 class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
-    def setUp(self):#creates fresh SweetManager each time; ENSURES TESTS ARE INDEPENDENT
+    def setUp(self): #creates fresh SweetManager each time; ENSURES TESTS ARE INDEPENDENT
         self.manager = SweetManager()
 
+    # adding single sweet
     def test_add_a_sweet(self):
         sweet = Sweet("Sonpapdi", "Dry", 10, 15.0)
         self.manager.add_sweet(sweet)# calling add sweet method to add sweet
@@ -17,6 +18,7 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         self.assertEqual(len(sweets), 1)
         self.assertEqual(sweets[0].name, "Sonpapdi")
 
+    #adding multiple sweets
     def test_add_multiple_sweets(self):
         sweet1 = Sweet("Ladoo", "Dry", 12, 30.0)
         sweet2 = Sweet("Barfi", "Milk", 5, 20.0)
@@ -25,9 +27,10 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
 
         sweets = self.manager.get_all_sweets()
 
-        self.assertEqual(len(sweets), 2)  # This should FAIL currently
+        self.assertEqual(len(sweets), 2)
         self.assertEqual(sweets[1].name, "Barfi")  # Optional extra check
 
+    #Ensures that trying to add a sweet with a duplicate name raises a ValueError.
     def test_adding_duplicate_sweet_raises_error(self):
         sweet1 = Sweet("Ladoo", "Desi", 5, 200)
         sweet2 = Sweet("Ladoo", "Festival", 10, 250)
@@ -39,18 +42,21 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
 
         self.assertEqual(str(context.exception), "Sweet with this name already exists")
 
+    #Ensures adding a sweet with a negative quantity raises ValueError
     def test_adding_sweet_with_negative_quantity_raises_error(self):
         sweet = Sweet("Kaju Katli", "Nut", -5, 400)
         with self.assertRaises(ValueError) as context:
             self.manager.add_sweet(sweet)
         self.assertEqual(str(context.exception), "Quantity must be non-negative")
 
+    #Ensures adding a sweet with a negative price raises ValueError.
     def test_adding_sweet_with_negative_price_raises_error(self):
         sweet = Sweet("Barfi", "Regular", 2, -250)
         with self.assertRaises(ValueError) as context:
             self.manager.add_sweet(sweet)
         self.assertEqual(str(context.exception), "price must be non-negative")
 
+    #Tests deletion of a single sweet
     def test_delete_single_sweet(self):
         sweet = Sweet("Ladoo", "Dry", 10, 15.0)
         self.manager.add_sweet(sweet)
@@ -60,6 +66,7 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
 
         self.assertEqual(len(sweets), 0)
 
+    #Tests sequential deletion of multiple sweets one by one
     def test_delete_multiple_sweets(self):
         sweet1 = Sweet("Ladoo", "Dry", 10, 15.0)
         sweet2 = Sweet("Barfi", "Milk", 8, 20.0)
@@ -76,6 +83,7 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         self.assertEqual(len(sweets), 1)
         self.assertEqual(sweets[0].name, "Ladoo")
 
+    #Tests deletion of multiple sweets in one call.
     def test_delete_multiple_sweets_in_one_call(self):
         sweet1 = Sweet("Ladoo", "Dry", 10, 15.0)
         sweet2 = Sweet("Barfi", "Milk", 8, 20.0)
@@ -91,11 +99,13 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         self.assertEqual(len(sweets), 1)
         self.assertEqual(sweets[0].name, "Ladoo")
 
+    #deleting a non-existent sweet raises ValueError.
     def test_delete_nonexistent_sweet_raises_error(self):
         with self.assertRaises(ValueError) as context:
             self.manager.delete_sweet("NonexistentSweet")
         self.assertEqual(str(context.exception), "Sweet not found")
 
+    #Tests successful update of sweet details (category, quantity, price)
     def test_update_sweet(self):
         sweet = Sweet("Ladoo", "Dry", 10, 15.0)
         self.manager.add_sweet(sweet)
@@ -111,12 +121,14 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         self.assertEqual(updated_sweet.quantity, 20)  # Quantity updated
         self.assertEqual(updated_sweet.price_per_kg, 18.0)  # Price updated
 
+    #Verifies update fails for non-existent sweet
     def test_update_nonexistent_sweet_raises_error(self):
         with self.assertRaises(ValueError) as context:
             self.manager.update_sweet("Nonexistentent", new_category="Milk")
 
         self.assertEqual(str(context.exception), "Sweet not found")
 
+    #Checks updating a sweet with a negative quantity raises ValueError.
     def test_update_sweet_with_negative_quantity_raises_error(self):
         sweet = Sweet("Ladoo", "Dry", 10, 15.0)
         self.manager.add_sweet(sweet)
@@ -125,6 +137,7 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
             self.manager.update_sweet("Ladoo","Dry", -5, 20.0)
         self.assertEqual(str(context.exception), "Quantity must be non-negative")
 
+    #Checks updating a sweet with a negative price raises ValueError.
     def test_update_sweet_with_negative_price_raises_error(self):
         sweet = Sweet("Ladoo", "Dry", 10, 15.0)
         self.manager.add_sweet(sweet)
@@ -133,6 +146,7 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
             self.manager.update_sweet("Ladoo", "Dry" ,5, -20.0)
         self.assertEqual(str(context.exception), "price must be non-negative")
 
+    #Confirms retrieval of all sweets.
     def test_get_all_sweets_returns_all(self):
         sweet1 = Sweet("Ladoo", "Milk", 10, 200.0)
         sweet2 = Sweet("Barfi", "Milk", 5, 250.0)
@@ -155,6 +169,7 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
 
         self.assertEqual(len(result), 2)
 
+    #Filters sweets by price range
     def test_filter_by_price_range_returns_correct_sweets(self):
         self.manager.add_sweet(Sweet("Ladoo", "Milk", 10, 200))
         self.manager.add_sweet(Sweet("Barfi", "Milk", 5, 400))
@@ -162,6 +177,7 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0].name, "Ladoo")
 
+    #Ensures category-based search
     def test_search_by_category_returns_matching_sweets(self):
         self.manager.add_sweet(Sweet("Kaju Katli", "Dryfruit", 10, 300))
         self.manager.add_sweet(Sweet("Ladoo", "Milk", 20, 100))
@@ -174,6 +190,7 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         self.assertEqual(result[0].name, "Kaju Katli")
         self.assertEqual(result[1].name, "Kaju Roll")
 
+    #Sorts sweets alphabetically by name
     def test_sort_by_name_alphabetical(self):
         self.manager.add_sweet(Sweet("Barfi", "Milk", 8, 200))
         self.manager.add_sweet(Sweet("Ladoo", "Milk", 5, 150))
@@ -182,6 +199,7 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         sorted_sweets = self.manager.sort_by_name()
         self.assertEqual([s.name for s in sorted_sweets], ["Barfi", "Kaju Katli", "Ladoo"])
 
+    #Sorts sweets alphabetically by category.
     def test_sort_by_category_alphabetical(self):
         self.manager.add_sweet(Sweet("Barfi", "Milk", 8, 200))
         self.manager.add_sweet(Sweet("Ladoo", "Sugar", 5, 150))
@@ -190,17 +208,20 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         sorted_sweets = self.manager.sort_by_category()
         self.assertEqual([s.category for s in sorted_sweets], ["Dryfruit", "Milk", "Sugar"])
 
+    #Verifies that purchasing a sweet correctly decreases quantity.
     def test_purchase_sweet_reduces_quantity(self):
         self.manager.add_sweet(Sweet("Gulab Jamun", "Milk", 20, 150))
         self.manager.purchase_sweet("Gulab Jamun", 5)
         self.assertEqual(self.manager.sweets[0].quantity, 15)
 
+    #trying to purchase more than available stock raises ValueError.
     def test_purchase_more_than_stock_raises_error(self):
         self.manager.add_sweet(Sweet("Kaju Katli", "Dryfruit", 3, 300))
         with self.assertRaises(ValueError) as context:
             self.manager.purchase_sweet("Kaju Katli", 5)
         self.assertEqual(str(context.exception), "Not enough stock")
 
+    #restocking a sweet correctly increases quantity.
     def test_restock_sweet_increases_quantity(self):
         sweet = Sweet("Rasgulla", "Syrup-based", 10, 150)
         self.manager.add_sweet(sweet)
@@ -209,11 +230,13 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
 
         self.assertEqual(sweet.quantity, 15)
 
+    #error is raised when trying to restock a non-existent sweet
     def test_restock_nonexistent_sweet_raises_error(self):
         with self.assertRaises(ValueError) as context:
             self.manager.restock_sweet("Nonexistent", 10)
         self.assertEqual(str(context.exception), "Sweet not found")
 
+    #Ensures restocking with invalid (e.g., 0) quantity raises ValueError
     def test_restock_with_invalid_quantity_raises_error(self):
         sweet = Sweet("Rasgulla", "Syrup-based", 10, 150)
         self.manager.add_sweet(sweet)
@@ -233,13 +256,6 @@ class TestDataPersistence(unittest.TestCase):
         manager.sweets = [
             Sweet(name="Kaju Katli", category="Dry Fruit", quantity=5, price_per_kg=1000)
         ]
-
-        # Print debug info
-        # print("\n--- Running test_save_data_creates_valid_json_file ---")
-        # print("🧁 manager.sweets =", manager.sweets)
-        # print("📦 Types in manager.sweets =", [type(s) for s in manager.sweets])
-        # for s in manager.sweets:
-        #     print(f"🔎 {s} (type={type(s)})")
 
         # Step 2: Save to file
         dp = DataPersistence(test_file)
@@ -296,6 +312,7 @@ class TestDataPersistence(unittest.TestCase):
         # Step 4: Clean up
         os.remove(test_file)
 
+    #loading data thats missing causes error
     def test_load_data_raises_if_file_missing(self):
         test_file = "missing_file.json"
 
