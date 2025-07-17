@@ -54,5 +54,17 @@ class SweetManager:
     def sort_by_category(self) -> list[Sweet]:
         return sorted(self.sweets, key=lambda sweet: sweet.category.lower())
 
+    def purchase_sweet(self, name: str, quantity: int):
+        if quantity <= 0:
+            raise ValueError("Quantity must be greater than zero")
+
+        for sweet in self.sweets:
+            if sweet.name.lower() == name.lower():
+                if sweet.quantity < quantity:
+                    raise ValueError("Not enough stock")
+                sweet.quantity -= quantity
+                return
+        raise ValueError("Sweet not found")
+
     def get_all_sweets(self):
         return self.sweets
