@@ -51,7 +51,7 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         sweet = Sweet("Ladoo", "Dry", 10, 15.0)
         self.manager.add_sweet(sweet)
 
-        self.manager.delete_sweet("Ladoo")
+        self.manager.delete_sweet(["Ladoo"])
         sweets = self.manager.get_all_sweets()
 
         self.assertEqual(len(sweets), 0)
@@ -65,8 +65,8 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         self.manager.add_sweet(sweet2)
         self.manager.add_sweet(sweet3)
 
-        self.manager.delete_sweet("Barfi")
-        self.manager.delete_sweet("Jalebi")
+        self.manager.delete_sweet(["Barfi"])
+        self.manager.delete_sweet(["Jalebi"])
 
         sweets = self.manager.get_all_sweets()
         self.assertEqual(len(sweets), 1)
@@ -86,6 +86,12 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         sweets = self.manager.get_all_sweets()
         self.assertEqual(len(sweets), 1)
         self.assertEqual(sweets[0].name, "Ladoo")
+
+    def test_delete_nonexistent_sweet_raises_error(self):
+        with self.assertRaises(ValueError) as context:
+            self.manager.delete_sweet(["NonexistentSweet"])
+        self.assertEqual(str(context.exception), "Sweet not found")
+
 
 if __name__ == "__main__":
     unittest.main()  # looks for all test_* methods and runs them.

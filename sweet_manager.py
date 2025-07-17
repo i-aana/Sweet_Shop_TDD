@@ -13,6 +13,12 @@ class SweetManager:
         self.sweets.append(sweet)
 
     def delete_sweet(self, names: list[str]):
+        existing_names = {sweet.name for sweet in self.sweets}
+        not_found = [name for name in names if name not in existing_names]
+
+        if not_found:
+            raise ValueError("Sweet not found")
+
         self.sweets = [sweet for sweet in self.sweets if sweet.name not in names]
 
     def get_all_sweets(self):
