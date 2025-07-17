@@ -205,6 +205,19 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
 
         self.assertEqual(sweet.quantity, 15)
 
+    def test_restock_nonexistent_sweet_raises_error(self):
+        with self.assertRaises(ValueError) as context:
+            self.manager.restock_sweet("Nonexistent", 10)
+        self.assertEqual(str(context.exception), "Sweet not found")
+
+    def test_restock_with_invalid_quantity_raises_error(self):
+        sweet = Sweet("Rasgulla", "Syrup-based", 10, 150)
+        self.manager.add_sweet(sweet)
+
+        with self.assertRaises(ValueError) as context:
+            self.manager.restock_sweet("Rasgulla", 0)
+        self.assertEqual(str(context.exception), "Quantity must be greater than zero")
+
 
 if __name__ == "__main__":
     unittest.main()  # looks for all test_* methods and runs them.

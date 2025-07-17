@@ -73,7 +73,8 @@ class SweetManager:
         for sweet in self.sweets:
             if sweet.name.lower() == name.lower():
                 sweet.quantity += quantity
-                break
+                return
+        raise ValueError("Sweet not found")
 
     def get_all_sweets(self):
         return self.sweets
