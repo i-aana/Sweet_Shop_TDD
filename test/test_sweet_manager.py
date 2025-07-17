@@ -121,6 +121,14 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
             self.manager.update_sweet("Ladoo","Dry", -5, 20.0)
         self.assertEqual(str(context.exception), "Quantity must be non-negative")
 
+    def test_update_sweet_with_negative_price_raises_error(self):
+        sweet = Sweet("Ladoo", "Dry", 10, 15.0)
+        self.manager.add_sweet(sweet)
+
+        with self.assertRaises(ValueError) as context:
+            self.manager.update_sweet("Ladoo", "Dry" ,5, -20.0)
+        self.assertEqual(str(context.exception), "price must be non-negative")
+
 
 if __name__ == "__main__":
     unittest.main()  # looks for all test_* methods and runs them.
