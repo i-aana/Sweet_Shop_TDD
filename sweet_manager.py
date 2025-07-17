@@ -38,6 +38,9 @@ class SweetManager:
             return
         raise ValueError("Sweet not found")
 
+    def search_by_name(self, name: str) -> list[Sweet]:
+        name = name.strip().lower()
+        return [sweet for sweet in self.sweets if sweet.name.lower().startswith(name)]
 
 
     def get_all_sweets(self):

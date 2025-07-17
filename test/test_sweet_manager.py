@@ -151,6 +151,12 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
 
         self.assertEqual(len(result), 2)
 
+    def test_filter_by_price_range_returns_correct_sweets(self):
+        self.manager.add_sweet(Sweet("Ladoo", "Milk", 10, 200))
+        self.manager.add_sweet(Sweet("Barfi", "Milk", 5, 400))
+        result = self.manager.filter_by_price_range(100, 300)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].name, "Ladoo")
 
 if __name__ == "__main__":
     unittest.main()  # looks for all test_* methods and runs them.
