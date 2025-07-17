@@ -197,6 +197,14 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
             self.manager.purchase_sweet("Kaju Katli", 5)
         self.assertEqual(str(context.exception), "Not enough stock")
 
+    def test_restock_sweet_increases_quantity(self):
+        sweet = Sweet("Rasgulla", "Syrup-based", 10, 150)
+        self.manager.add_sweet(sweet)
+
+        self.manager.restock_sweet("Rasgulla", 5)
+
+        self.assertEqual(sweet.quantity, 15)
+
 
 if __name__ == "__main__":
     unittest.main()  # looks for all test_* methods and runs them.

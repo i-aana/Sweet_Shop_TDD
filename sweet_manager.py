@@ -66,5 +66,14 @@ class SweetManager:
                 return
         raise ValueError("Sweet not found")
 
+    def restock_sweet(self, name: str, quantity: int):
+        if quantity <= 0:
+            raise ValueError("Quantity must be greater than zero")
+
+        for sweet in self.sweets:
+            if sweet.name.lower() == name.lower():
+                sweet.quantity += quantity
+                break
+
     def get_all_sweets(self):
         return self.sweets
