@@ -38,5 +38,7 @@ class SweetManager:
             return
         raise ValueError("Sweet not found")
 
+
+
     def get_all_sweets(self):
         return self.sweets
