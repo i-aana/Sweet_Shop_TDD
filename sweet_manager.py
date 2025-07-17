@@ -42,6 +42,9 @@ class SweetManager:
         name = name.strip().lower()
         return [sweet for sweet in self.sweets if sweet.name.lower().startswith(name)]
 
+    def filter_by_price_range(self, min_price: float, max_price: float) -> list[Sweet]:
+        return [sweet for sweet in self.sweets if min_price <= sweet.price_per_kg <= max_price]
+
 
     def get_all_sweets(self):
         return self.sweets
