@@ -10,16 +10,23 @@ A Python-based Sweet Shop Management System built using **Test-Driven Developmen
 ```
 Sweet_Shop_TDD/
 │
-├── sweet.py                 # Sweet class model
-├── sweet_manager.py         # Core business logic
-├── data_persistence.py      # JSON file handling (save/load)
+├── sweet.py                      # Sweet class model
+├── sweet_manager.py             # Core business logic
+├── data_persistence.py          # JSON file handling (save/load)
 │
 ├── test/
-│   ├── test_sweet_manager.py      # Unit tests for SweetManager
+│   ├── test_sweet_manager.py    # Unit tests for SweetManager
 │
-├── sweets.json              # Data storage 
-└── README.md
+├── sweets.json                  # Data storage 
+├── docs/
+│   └── index.html               # HTML test report (viewable via GitHub Pages)
+│
+└── README.md                    # Project overview and instructions
 ```
+
+---
+## To See Test Results:
+Click this : https://i-aana.github.io/Sweet_Shop_TDD/index.html
 
 ---
 
