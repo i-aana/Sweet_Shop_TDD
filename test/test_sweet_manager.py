@@ -89,7 +89,7 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
 
     def test_delete_nonexistent_sweet_raises_error(self):
         with self.assertRaises(ValueError) as context:
-            self.manager.delete_sweet(["NonexistentSweet"])
+            self.manager.delete_sweet("NonexistentSweet")
         self.assertEqual(str(context.exception), "Sweet not found")
 
     def test_update_sweet(self):
@@ -106,6 +106,20 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         self.assertEqual(updated_sweet.category, "Milk")  # category updated
         self.assertEqual(updated_sweet.quantity, 20)  # Quantity updated
         self.assertEqual(updated_sweet.price_per_kg, 18.0)  # Price updated
+
+    def test_update_nonexistent_sweet_raises_error(self):
+        with self.assertRaises(ValueError) as context:
+            self.manager.update_sweet("Nonexistentent", new_category="Milk")
+
+        self.assertEqual(str(context.exception), "Sweet not found")
+
+    def test_update_sweet_with_negative_quantity_raises_error(self):
+        sweet = Sweet("Ladoo", "Dry", 10, 15.0)
+        self.manager.add_sweet(sweet)
+
+        with self.assertRaises(ValueError) as context:
+            self.manager.update_sweet("Ladoo","Dry", -5, 20.0)
+        self.assertEqual(str(context.exception), "Quantity must be non-negative")
 
 
 if __name__ == "__main__":

@@ -12,10 +12,11 @@ class SweetManager:
             raise ValueError("price must be non-negative")
         self.sweets.append(sweet)
 
-    def delete_sweet(self, names: list[str]):
-        existing_names = {sweet.name for sweet in self.sweets}
-        not_found = [name for name in names if name not in existing_names]
+    def delete_sweet(self, names: list[str] | str):
+        if isinstance(names, str):
+            names = [names]
 
+        not_found = [name for name in names if name not in [s.name for s in self.sweets]]
         if not_found:
             raise ValueError("Sweet not found")
 
@@ -30,7 +31,8 @@ class SweetManager:
                     sweet.price_per_kg = new_price
                 if new_category is not None:
                     sweet.category = new_category
-                break
+            return
+        raise ValueError("Sweet not found")
 
     def get_all_sweets(self):
         return self.sweets
