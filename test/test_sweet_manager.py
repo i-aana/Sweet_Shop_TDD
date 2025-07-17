@@ -92,6 +92,21 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
             self.manager.delete_sweet(["NonexistentSweet"])
         self.assertEqual(str(context.exception), "Sweet not found")
 
+    def test_update_sweet(self):
+        sweet = Sweet("Ladoo", "Dry", 10, 15.0)
+        self.manager.add_sweet(sweet)
+
+        # Now update the sweet
+        self.manager.update_sweet("Ladoo", new_category="Milk", new_quantity=20, new_price=18.0)
+
+        sweets = self.manager.get_all_sweets()
+        self.assertEqual(len(sweets), 1)
+        updated_sweet = sweets[0]
+        self.assertEqual(updated_sweet.name, "Ladoo")  # Name stays same
+        self.assertEqual(updated_sweet.category, "Milk")  # category updated
+        self.assertEqual(updated_sweet.quantity, 20)  # Quantity updated
+        self.assertEqual(updated_sweet.price_per_kg, 18.0)  # Price updated
+
 
 if __name__ == "__main__":
     unittest.main()  # looks for all test_* methods and runs them.

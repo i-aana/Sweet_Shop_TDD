@@ -21,5 +21,16 @@ class SweetManager:
 
         self.sweets = [sweet for sweet in self.sweets if sweet.name not in names]
 
+    def update_sweet(self, name, new_category=None, new_quantity=None, new_price=None):
+        for sweet in self.sweets:
+            if sweet.name == name:
+                if new_quantity is not None:
+                    sweet.quantity = new_quantity
+                if new_price is not None:
+                    sweet.price_per_kg = new_price
+                if new_category is not None:
+                    sweet.category = new_category
+                break
+
     def get_all_sweets(self):
         return self.sweets
