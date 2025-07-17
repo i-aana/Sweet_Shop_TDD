@@ -221,6 +221,7 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
             self.manager.restock_sweet("Rasgulla", 0)
         self.assertEqual(str(context.exception), "Quantity must be greater than zero")
 
+#storing and retrieving sweets info.
 class TestDataPersistence(unittest.TestCase):
 
     def test_save_data_creates_valid_json_file(self):
@@ -293,6 +294,19 @@ class TestDataPersistence(unittest.TestCase):
 
         # Step 4: Clean up
         os.remove(test_file)
+
+    def test_load_data_handles_nonexistent_file(self):
+        test_file = "nonexistent_file.json"
+
+        # Ensure file does not exist
+        if os.path.exists(test_file):
+            os.remove(test_file)
+
+        dp = DataPersistence(test_file)
+        result = dp.load_data()
+
+        # Assert that it returns an empty list, not an exception
+        self.assertEqual(result, "Sweet data file not found")
 
 
 if __name__ == "__main__":

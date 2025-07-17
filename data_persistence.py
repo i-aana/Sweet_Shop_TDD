@@ -12,7 +12,7 @@ class DataPersistence:
 
     def load_data(self) -> list[Sweet]:
         if not os.path.exists(self.filepath):
-            return []
+            return "Sweet data file not found"
         with open(self.filepath, "r") as f:
             data = json.load(f)
         return [Sweet.from_dict(sweet_dict) for sweet_dict in data]
