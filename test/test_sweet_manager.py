@@ -47,5 +47,45 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
             self.manager.add_sweet(sweet)
         self.assertEqual(str(context.exception), "price must be non-negative")
 
+    def test_delete_single_sweet(self):
+        sweet = Sweet("Ladoo", "Dry", 10, 15.0)
+        self.manager.add_sweet(sweet)
+
+        self.manager.delete_sweet("Ladoo")
+        sweets = self.manager.get_all_sweets()
+
+        self.assertEqual(len(sweets), 0)
+
+    def test_delete_multiple_sweets(self):
+        sweet1 = Sweet("Ladoo", "Dry", 10, 15.0)
+        sweet2 = Sweet("Barfi", "Milk", 8, 20.0)
+        sweet3 = Sweet("Jalebi", "Sugar", 12, 10.0)
+
+        self.manager.add_sweet(sweet1)
+        self.manager.add_sweet(sweet2)
+        self.manager.add_sweet(sweet3)
+
+        self.manager.delete_sweet("Barfi")
+        self.manager.delete_sweet("Jalebi")
+
+        sweets = self.manager.get_all_sweets()
+        self.assertEqual(len(sweets), 1)
+        self.assertEqual(sweets[0].name, "Ladoo")
+
+    def test_delete_multiple_sweets_in_one_call(self):
+        sweet1 = Sweet("Ladoo", "Dry", 10, 15.0)
+        sweet2 = Sweet("Barfi", "Milk", 8, 20.0)
+        sweet3 = Sweet("Jalebi", "Sugar", 12, 10.0)
+
+        self.manager.add_sweet(sweet1)
+        self.manager.add_sweet(sweet2)
+        self.manager.add_sweet(sweet3)
+
+        self.manager.delete_sweet(["Barfi", "Jalebi"])
+
+        sweets = self.manager.get_all_sweets()
+        self.assertEqual(len(sweets), 1)
+        self.assertEqual(sweets[0].name, "Ladoo")
+
 if __name__ == "__main__":
     unittest.main()  # looks for all test_* methods and runs them.

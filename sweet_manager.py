@@ -12,5 +12,8 @@ class SweetManager:
             raise ValueError("price must be non-negative")
         self.sweets.append(sweet)
 
+    def delete_sweet(self, names: list[str]):
+        self.sweets = [sweet for sweet in self.sweets if sweet.name not in names]
+
     def get_all_sweets(self):
         return self.sweets
