@@ -48,5 +48,11 @@ class SweetManager:
     def search_by_category(self, category: str) -> list[Sweet]:
         return [sweet for sweet in self.sweets if sweet.category.lower() == category.lower()]
 
+    def sort_by_name(self) -> list[Sweet]:
+        return sorted(self.sweets, key=lambda sweet: sweet.name.lower())
+
+    def sort_by_category(self) -> list[Sweet]:
+        return sorted(self.sweets, key=lambda sweet: sweet.category.lower())
+
     def get_all_sweets(self):
         return self.sweets
