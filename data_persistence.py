@@ -1,6 +1,12 @@
 import json
 from sweet import Sweet
 import os
+
+#for data not found while loading data
+class SweetDataNotFoundError(Exception):
+    """Raised when the sweets.json file is not found."""
+    pass
+
 class DataPersistence:
     def __init__(self, filepath="sweets.json"):
         self.filepath = filepath
@@ -12,7 +18,7 @@ class DataPersistence:
 
     def load_data(self) -> list[Sweet]:
         if not os.path.exists(self.filepath):
-            return "Sweet data file not found"
+            raise SweetDataNotFoundError("Sweet data file not found")
         with open(self.filepath, "r") as f:
             data = json.load(f)
         return [Sweet.from_dict(sweet_dict) for sweet_dict in data]

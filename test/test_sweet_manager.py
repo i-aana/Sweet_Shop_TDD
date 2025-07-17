@@ -4,6 +4,7 @@ from sweet_manager import SweetManager
 import os
 import json
 from data_persistence import DataPersistence
+from data_persistence import SweetDataNotFoundError
 class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
     def setUp(self):#creates fresh SweetManager each time; ENSURES TESTS ARE INDEPENDENT
         self.manager = SweetManager()
@@ -295,18 +296,16 @@ class TestDataPersistence(unittest.TestCase):
         # Step 4: Clean up
         os.remove(test_file)
 
-    def test_load_data_handles_nonexistent_file(self):
-        test_file = "nonexistent_file.json"
+    def test_load_data_raises_if_file_missing(self):
+        test_file = "missing_file.json"
 
-        # Ensure file does not exist
         if os.path.exists(test_file):
             os.remove(test_file)
 
         dp = DataPersistence(test_file)
-        result = dp.load_data()
 
-        # Assert that it returns an empty list, not an exception
-        self.assertEqual(result, "Sweet data file not found")
+        with self.assertRaises(SweetDataNotFoundError):
+            dp.load_data()
 
 
 if __name__ == "__main__":
