@@ -45,6 +45,8 @@ class SweetManager:
     def filter_by_price_range(self, min_price: float, max_price: float) -> list[Sweet]:
         return [sweet for sweet in self.sweets if min_price <= sweet.price_per_kg <= max_price]
 
+    def search_by_category(self, category: str) -> list[Sweet]:
+        return [sweet for sweet in self.sweets if sweet.category.lower() == category.lower()]
 
     def get_all_sweets(self):
         return self.sweets
