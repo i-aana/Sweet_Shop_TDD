@@ -186,6 +186,10 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         sorted_sweets = self.manager.sort_by_category()
         self.assertEqual([s.category for s in sorted_sweets], ["Dryfruit", "Milk", "Sugar"])
 
+    def test_purchase_sweet_reduces_quantity(self):
+        self.manager.add_sweet(Sweet("Gulab Jamun", "Milk", 20, 150))
+        self.manager.purchase_sweet("Gulab Jamun", 5)
+        self.assertEqual(self.manager.sweets[0].quantity, 15)
 
 
 if __name__ == "__main__":
