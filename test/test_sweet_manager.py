@@ -233,11 +233,11 @@ class TestDataPersistence(unittest.TestCase):
         ]
 
         # Print debug info
-        print("\n--- Running test_save_data_creates_valid_json_file ---")
-        print("🧁 manager.sweets =", manager.sweets)
-        print("📦 Types in manager.sweets =", [type(s) for s in manager.sweets])
-        for s in manager.sweets:
-            print(f"🔎 {s} (type={type(s)})")
+        # print("\n--- Running test_save_data_creates_valid_json_file ---")
+        # print("🧁 manager.sweets =", manager.sweets)
+        # print("📦 Types in manager.sweets =", [type(s) for s in manager.sweets])
+        # for s in manager.sweets:
+        #     print(f"🔎 {s} (type={type(s)})")
 
         # Step 2: Save to file
         dp = DataPersistence(test_file)
@@ -260,8 +260,39 @@ class TestDataPersistence(unittest.TestCase):
         self.assertEqual(sweet_data['price_per_kg'], 1000)
 
         # Step 5: Cleanup
-        if os.path.exists(test_file):
-            os.remove(test_file)
+
+        os.remove(test_file)
+
+    def test_load_data_reads_valid_json_file(self):
+        test_file = "test_sweets_load.json"
+
+        # Step 1: Prepare a dummy JSON file
+        sample_data = [
+            {
+                "name": "Rasgulla",
+                "category": "Syrupy",
+                "quantity": 10,
+                "price_per_kg": 600
+            }
+        ]
+        with open(test_file, "w") as f:
+            json.dump(sample_data, f, indent=4)
+
+        # Step 2: Load using DataPersistence
+        dp = DataPersistence(test_file)
+        sweets = dp.load_data()
+
+        # Step 3: Assert content
+        self.assertEqual(len(sweets), 1)
+        sweet = sweets[0]
+        self.assertIsInstance(sweet, Sweet)
+        self.assertEqual(sweet.name, "Rasgulla")
+        self.assertEqual(sweet.category, "Syrupy")
+        self.assertEqual(sweet.quantity, 10)
+        self.assertEqual(sweet.price_per_kg, 600)
+
+        # Step 4: Clean up
+        os.remove(test_file)
 
 
 if __name__ == "__main__":
