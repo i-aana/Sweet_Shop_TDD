@@ -140,6 +140,17 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         self.assertEqual(sweets[0].name, "Ladoo")
         self.assertEqual(sweets[1].name, "Barfi")
 
+    def test_search_by_name_returns_matching_sweets(self):
+        self.manager.add_sweet(Sweet("Kaju Katli", "Dryfruit", 10, 300))
+        self.manager.add_sweet(Sweet("Kaju Roll", "Dryfruit", 5, 250))
+        self.manager.add_sweet(Sweet("Chocolate Barfi", "Milk", 8, 200))
+        self.manager.add_sweet(Sweet("Kesar Kaju", "Dryfruit", 6, 350))
+        self.manager.add_sweet(Sweet("Ladoo", "Milk", 15, 100))  # Irrelevant
+
+        result = self.manager.search_by_name("kaju")
+
+        self.assertEqual(len(result), 2)
+
 
 if __name__ == "__main__":
     unittest.main()  # looks for all test_* methods and runs them.
