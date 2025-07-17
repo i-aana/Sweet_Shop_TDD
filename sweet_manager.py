@@ -30,6 +30,8 @@ class SweetManager:
                         raise ValueError("Quantity must be non-negative")
                     sweet.quantity = new_quantity
                 if new_price is not None:
+                    if new_price < 0:
+                        raise ValueError("price must be non-negative")
                     sweet.price_per_kg = new_price
                 if new_category is not None:
                     sweet.category = new_category
