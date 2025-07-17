@@ -26,6 +26,8 @@ class SweetManager:
         for sweet in self.sweets:
             if sweet.name == name:
                 if new_quantity is not None:
+                    if new_quantity < 0:
+                        raise ValueError("Quantity must be non-negative")
                     sweet.quantity = new_quantity
                 if new_price is not None:
                     sweet.price_per_kg = new_price
