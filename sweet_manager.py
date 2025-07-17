@@ -1,7 +1,9 @@
 from sweet import Sweet
+from data_persistence import DataPersistence
 class SweetManager:
     def __init__(self):
         self.sweets = []
+        self.data_persistence = DataPersistence()
 
     def add_sweet(self, sweet: Sweet):
         if any(existing_sweet.name == sweet.name for existing_sweet in self.sweets):
@@ -11,15 +13,21 @@ class SweetManager:
         if sweet.price_per_kg < 0:
             raise ValueError("price must be non-negative")
         self.sweets.append(sweet)
+        self.data_persistence.save_data(self.sweets)
 
     def delete_sweet(self, names: list[str] | str):
         if isinstance(names, str):
             names = [names]
 
-        not_found = [name for name in names if name not in [s.name for s in self.sweets]]
+        # Gather all current sweet names
+        existing_names = {s.name for s in self.sweets}
+
+        # Identify names that are not in the list
+        not_found = [name for name in names if name not in existing_names]
         if not_found:
             raise ValueError("Sweet not found")
 
+        # Delete all matching sweets
         self.sweets = [sweet for sweet in self.sweets if sweet.name not in names]
 
     def update_sweet(self, name, new_category=None, new_quantity=None, new_price=None):

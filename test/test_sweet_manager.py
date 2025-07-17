@@ -1,6 +1,9 @@
 import unittest
 from sweet import Sweet
 from sweet_manager import SweetManager
+import os
+import json
+from data_persistence import DataPersistence
 class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
     def setUp(self):#creates fresh SweetManager each time; ENSURES TESTS ARE INDEPENDENT
         self.manager = SweetManager()
@@ -217,6 +220,48 @@ class TestSweetManager(unittest.TestCase):#inheriting from unittest.TestCase
         with self.assertRaises(ValueError) as context:
             self.manager.restock_sweet("Rasgulla", 0)
         self.assertEqual(str(context.exception), "Quantity must be greater than zero")
+
+class TestDataPersistence(unittest.TestCase):
+
+    def test_save_data_creates_valid_json_file(self):
+        test_file = "test_sweets_save.json"
+
+        # Step 1: Create manager and add a sweet object
+        manager = SweetManager()
+        manager.sweets = [
+            Sweet(name="Kaju Katli", category="Dry Fruit", quantity=5, price_per_kg=1000)
+        ]
+
+        # Print debug info
+        print("\n--- Running test_save_data_creates_valid_json_file ---")
+        print("🧁 manager.sweets =", manager.sweets)
+        print("📦 Types in manager.sweets =", [type(s) for s in manager.sweets])
+        for s in manager.sweets:
+            print(f"🔎 {s} (type={type(s)})")
+
+        # Step 2: Save to file
+        dp = DataPersistence(test_file)
+        dp.save_data(manager.sweets)
+
+        # Step 3: Assert file created
+        self.assertTrue(os.path.exists(test_file), "JSON file not created!")
+
+        # Step 4: Load and verify contents
+        with open(test_file, 'r') as f:
+            data = json.load(f)
+
+        self.assertIsInstance(data, list)
+        self.assertEqual(len(data), 1)
+
+        sweet_data = data[0]
+        self.assertEqual(sweet_data['name'], "Kaju Katli")
+        self.assertEqual(sweet_data['category'], "Dry Fruit")
+        self.assertEqual(sweet_data['quantity'], 5)
+        self.assertEqual(sweet_data['price_per_kg'], 1000)
+
+        # Step 5: Cleanup
+        if os.path.exists(test_file):
+            os.remove(test_file)
 
 
 if __name__ == "__main__":
